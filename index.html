@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: blue;
+            color: white;
+            cursor: pointer;
+        }
+        #weatherResult {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weather App</h2>
+        <input type="text" id="location" placeholder="Enter location" />
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weatherResult"></div>
+    </div>
+    
+    <script>
+        async function getWeather() {
+            let location = document.getElementById("location").value;
+            if (!location) {
+                alert("Please enter a location");
+                return;
+            }
+            
+            let apiKey = "40347e1c8b784d22900170120252102";
+            let url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById("weatherResult").innerHTML = "Location not found";
+                } else {
+                    document.getElementById("weatherResult").innerHTML = 
+                        `Temperature in ${data.location.name}, ${data.location.country}: ${data.current.temp_c}°C`;
+                }
+            } catch (error) {
+                document.getElementById("weatherResult").innerHTML = "Error fetching weather data";
+            }
+        }
+    </script>
+</body>
+</html>
